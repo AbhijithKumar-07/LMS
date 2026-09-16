@@ -1,0 +1,15 @@
+node_modules
+dist
+.env
+uploads
+.next
+coverage
+*.log
+drive_file_download
+.vscode/
+.vscode
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

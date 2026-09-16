@@ -1,0 +1,19 @@
+{
+  "name": "credit-sea-lms",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm --workspace backend run dev",
+    "dev:frontend": "npm --workspace frontend run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "npm --workspace backend run build",
+    "build:frontend": "npm --workspace frontend run build",
+    "mongo:up": "docker compose up -d mongo",
+    "mongo:down": "docker compose down",
+    "seed": "npm --workspace backend run seed"
+  }
+}

@@ -1,0 +1,1101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --font-inter: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide Next.js development indicator badge */
+nextjs-portal,
+[data-nextjs-dev-tools-button],
+[data-nextjs-toast],
+div[data-next-badge],
+#next-route-announcer {
+  display: none !important;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Modern Range Slider Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 9999px;
+  outline: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+input[type="range"]:hover {
+  background: #cbd5e1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  background: #4338ca;
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.18);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.18);
+  background: #4338ca;
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.18);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focus rings */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all duration-150;
+}
+
+/* Indeterminate progress bar animation */
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+    width: 30%;
+  }
+  50% {
+    transform: translateX(100%);
+    width: 70%;
+  }
+  100% {
+    transform: translateX(250%);
+    width: 30%;
+  }
+}
+
+.animate-indeterminate {
+  animation: indeterminate 1.4s infinite ease-in-out;
+}
+
+/* Pipeline Transition Fluid Waves */
+@keyframes pipelineDotPulse {
+  0%, 100% {
+    transform: scale(0.75);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.animate-dot-1 {
+  animation: pipelineDotPulse 1.4s ease-in-out infinite 0s;
+}
+.animate-dot-2 {
+  animation: pipelineDotPulse 1.4s ease-in-out infinite 0.28s;
+}
+.animate-dot-3 {
+  animation: pipelineDotPulse 1.4s ease-in-out infinite 0.56s;
+}
+
+/* Single Sequential Spark Moving from Stage 1 -> 2 -> 3 -> 4 with Stage Dwell/Pause Time */
+/* =========================================================================
+   9.6s Sequential Sparks Moving ONLY AFTER Previous Stage Green Tick is Done
+   - Spark 1: leaves Stage 1 at 17.4% (Stage 1 completes at 17.2%), enters Stage 2 at 28.7% (Stage 2 starts)
+   - Spark 2: leaves Stage 2 at 40.1% (Stage 2 completes at 39.9%), enters Stage 3 at 51.4% (Stage 3 starts)
+   - Spark 3: leaves Stage 3 at 62.8% (Stage 3 completes at 62.6%), enters Stage 4 at 74.1% (Stage 4 starts)
+   ========================================================================= */
+@keyframes singleSparkGap1 {
+  0%, 17.2% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  17.4% {
+    left: 0%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  28.5% {
+    left: 100%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  28.7% {
+    left: 100%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  28.8%, 100% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+@keyframes singleSparkGap2 {
+  0%, 39.9% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  40.1% {
+    left: 0%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  51.2% {
+    left: 100%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  51.4% {
+    left: 100%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  51.5%, 100% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+@keyframes singleSparkGap3 {
+  0%, 62.6% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  62.8% {
+    left: 0%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  73.9% {
+    left: 100%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  74.1% {
+    left: 100%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  74.2%, 100% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+.animate-spark-gap-1 {
+  animation: singleSparkGap1 9.6s linear infinite;
+}
+.animate-spark-gap-2 {
+  animation: singleSparkGap2 9.6s linear infinite;
+}
+.animate-spark-gap-3 {
+  animation: singleSparkGap3 9.6s linear infinite;
+}
+
+/* =========================================================================
+   Loan Lifecycle Pipeline Stage Progression & Backward Cascade Reset Wave
+   ========================================================================= */
+
+/* Stage 1 (Sales Leads):
+   - Rest gap before cycle starts: 0.0% - 6.0% (~600ms calm pause)
+   - Icon animation: 6.0% - 11.2% (~500ms smooth movement)
+   - Small distinct gap: 11.2% - 12.6% (~135ms pause)
+   - Lock dissolves & Tick draws: 12.6% - 17.2%
+   - Spark 1 leaves at 18.2%
+   - Stays completed through 97.6%
+   - Backward reset wave finishes at Stage 1: 97.6% - 99.8%
+*/
+@keyframes stage1LockAnim {
+  0%, 12.6% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  13.8% {
+    opacity: 0;
+    transform: scale(0.65);
+    pointer-events: none;
+  }
+  97.6% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+  99.8%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+}
+
+@keyframes stage1CheckAnim {
+  0%, 12.6% {
+    opacity: 0;
+    transform: scale(0.75);
+    pointer-events: none;
+  }
+  13.8% {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    pointer-events: auto;
+  }
+  17.2% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+    pointer-events: auto;
+  }
+  97.6% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  99.8%, 100% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+}
+
+@keyframes stage1TickDraw {
+  0%, 12.8% {
+    stroke-dashoffset: 22;
+  }
+  15.0% {
+    stroke-dashoffset: 11;
+  }
+  17.2%, 97.6% {
+    stroke-dashoffset: 0;
+  }
+  99.8%, 100% {
+    stroke-dashoffset: 22;
+  }
+}
+
+@keyframes stage1BadgeAnim {
+  0%, 6.0% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+  6.5%, 97.6% {
+    background-color: #4f46e5;
+    color: #ffffff;
+  }
+  99.8%, 100% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+}
+
+@keyframes stage1CardAnim {
+  0%, 6.0% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  6.5%, 97.6% {
+    background-color: #ffffff;
+    border-color: #c7d2fe;
+  }
+  99.8%, 100% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+}
+
+.animate-stage1-lock {
+  animation: stage1LockAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage1-check {
+  animation: stage1CheckAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage1-tick-draw {
+  stroke-dasharray: 22;
+  animation: stage1TickDraw 9.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+.animate-stage1-badge {
+  animation: stage1BadgeAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage1-card {
+  animation: stage1CardAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Stage 2 (Sanction Queue):
+   - Spark 1 arrives at 28.7%
+   - Icon animation: 28.7% - 33.9% (~500ms smooth movement)
+   - Small distinct gap: 33.9% - 35.3% (~135ms pause)
+   - Lock dissolves & Tick draws: 35.3% - 39.9%
+   - Spark 2 leaves at 40.9%
+   - Stays completed through 95.4%
+   - Backward reset wave resets Stage 2: 95.4% - 97.6%
+*/
+@keyframes stage2LockAnim {
+  0%, 35.3% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  36.5% {
+    opacity: 0;
+    transform: scale(0.65);
+    pointer-events: none;
+  }
+  95.4% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+  97.6%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+}
+
+@keyframes stage2CheckAnim {
+  0%, 35.3% {
+    opacity: 0;
+    transform: scale(0.75);
+    pointer-events: none;
+  }
+  36.5% {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    pointer-events: auto;
+  }
+  39.9% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+    pointer-events: auto;
+  }
+  95.4% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  97.6%, 100% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+}
+
+@keyframes stage2TickDraw {
+  0%, 35.5% {
+    stroke-dashoffset: 22;
+  }
+  37.7% {
+    stroke-dashoffset: 11;
+  }
+  39.9%, 95.4% {
+    stroke-dashoffset: 0;
+  }
+  97.6%, 100% {
+    stroke-dashoffset: 22;
+  }
+}
+
+@keyframes stage2BadgeAnim {
+  0%, 28.7% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+  29.7%, 95.4% {
+    background-color: #d97706;
+    color: #ffffff;
+  }
+  97.6%, 100% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+}
+
+@keyframes stage2CardAnim {
+  0%, 28.7% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  29.7%, 95.4% {
+    background-color: #ffffff;
+    border-color: #fde68a;
+  }
+  97.6%, 100% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+}
+
+.animate-stage2-lock {
+  animation: stage2LockAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage2-check {
+  animation: stage2CheckAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage2-tick-draw {
+  stroke-dasharray: 22;
+  animation: stage2TickDraw 9.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+.animate-stage2-badge {
+  animation: stage2BadgeAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage2-card {
+  animation: stage2CardAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Stage 3 (Disbursement Desk):
+   - Spark 2 arrives at 51.4%
+   - Icon animation: 51.4% - 56.6% (~500ms smooth movement)
+   - Small distinct gap: 56.6% - 58.0% (~135ms pause)
+   - Lock dissolves & Tick draws: 58.0% - 62.6%
+   - Spark 3 leaves at 63.6%
+   - Stays completed through 93.2%
+   - Backward reset wave resets Stage 3: 93.2% - 95.4%
+*/
+@keyframes stage3LockAnim {
+  0%, 58.0% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  59.2% {
+    opacity: 0;
+    transform: scale(0.65);
+    pointer-events: none;
+  }
+  93.2% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+  95.4%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+}
+
+@keyframes stage3CheckAnim {
+  0%, 58.0% {
+    opacity: 0;
+    transform: scale(0.75);
+    pointer-events: none;
+  }
+  59.2% {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    pointer-events: auto;
+  }
+  62.6% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+    pointer-events: auto;
+  }
+  93.2% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  95.4%, 100% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+}
+
+@keyframes stage3TickDraw {
+  0%, 58.2% {
+    stroke-dashoffset: 22;
+  }
+  60.4% {
+    stroke-dashoffset: 11;
+  }
+  62.6%, 93.2% {
+    stroke-dashoffset: 0;
+  }
+  95.4%, 100% {
+    stroke-dashoffset: 22;
+  }
+}
+
+@keyframes stage3BadgeAnim {
+  0%, 51.4% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+  52.4%, 93.2% {
+    background-color: #0891b2;
+    color: #ffffff;
+  }
+  95.4%, 100% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+}
+
+@keyframes stage3CardAnim {
+  0%, 51.4% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  52.4%, 93.2% {
+    background-color: #ffffff;
+    border-color: #a5f3fc;
+  }
+  95.4%, 100% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+}
+
+.animate-stage3-lock {
+  animation: stage3LockAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage3-check {
+  animation: stage3CheckAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage3-tick-draw {
+  stroke-dasharray: 22;
+  animation: stage3TickDraw 9.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+.animate-stage3-badge {
+  animation: stage3BadgeAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage3-card {
+  animation: stage3CardAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Stage 4 (Collections Hub):
+   - Spark 3 arrives at 74.1%
+   - Icon animation: 74.1% - 79.3% (~500ms smooth movement)
+   - Small distinct gap: 79.3% - 80.7% (~135ms pause)
+   - Lock dissolves & Tick draws: 80.7% - 85.3%
+   - All 4 stages glow complete: 85.3% - 91.0%
+   - Backward reset wave starts at Stage 4: 91.0% - 93.2%
+*/
+@keyframes stage4LockAnim {
+  0%, 80.7% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  81.9% {
+    opacity: 0;
+    transform: scale(0.65);
+    pointer-events: none;
+  }
+  91.0% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+  93.2%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+}
+
+@keyframes stage4CheckAnim {
+  0%, 80.7% {
+    opacity: 0;
+    transform: scale(0.75);
+    pointer-events: none;
+  }
+  81.9% {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    pointer-events: auto;
+  }
+  85.3% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+    pointer-events: auto;
+  }
+  91.0% {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  93.2%, 100% {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+}
+
+@keyframes stage4TickDraw {
+  0%, 80.9% {
+    stroke-dashoffset: 22;
+  }
+  83.1% {
+    stroke-dashoffset: 11;
+  }
+  85.3%, 91.0% {
+    stroke-dashoffset: 0;
+  }
+  93.2%, 100% {
+    stroke-dashoffset: 22;
+  }
+}
+
+@keyframes stage4BadgeAnim {
+  0%, 74.1% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+  75.1%, 91.0% {
+    background-color: #059669;
+    color: #ffffff;
+  }
+  93.2%, 100% {
+    background-color: #334155;
+    color: #cbd5e1;
+  }
+}
+
+@keyframes stage4CardAnim {
+  0%, 74.1% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  75.1%, 91.0% {
+    background-color: #ffffff;
+    border-color: #a7f3d0;
+  }
+  93.2%, 100% {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+  }
+}
+
+.animate-stage4-lock {
+  animation: stage4LockAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage4-check {
+  animation: stage4CheckAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage4-tick-draw {
+  stroke-dasharray: 22;
+  animation: stage4TickDraw 9.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+.animate-stage4-badge {
+  animation: stage4BadgeAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.animate-stage4-card {
+  animation: stage4CardAnim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* =========================================================================
+   Loan Lifecycle Pipeline Stage Animations (Sequential 9.6s Matching Animations)
+   ========================================================================= */
+
+/* Stage 1: Sales Leads - Arrow Tip Shoot & Chart Line Pulse (6.0% - 11.2%) */
+@keyframes pipelineArrowTipShoot {
+  0%, 6.0% {
+    transform: translate(0, 0);
+  }
+  8.2% {
+    transform: translate(3.5px, -3.5px);
+  }
+  10.0% {
+    transform: translate(-0.3px, 0.3px);
+  }
+  11.2%, 100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes pipelineChartLinePulse {
+  0%, 6.0% {
+    stroke-dashoffset: 0;
+  }
+  8.6% {
+    stroke-dashoffset: -12;
+  }
+  11.2%, 100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.pipeline-arrow-tip {
+  animation: pipelineArrowTipShoot 9.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+.pipeline-chart-line {
+  stroke-dasharray: 32;
+  animation: pipelineChartLinePulse 9.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Stage 2: Sanction Queue - Shield Checkmark Pop (Active at 28.7% - 33.9%) */
+@keyframes pipelineShieldCheckPop {
+  0%, 28.7% {
+    transform: scale(1);
+    stroke-dashoffset: 0;
+  }
+  30.3% {
+    transform: scale(0.75);
+    stroke-dashoffset: 10;
+  }
+  32.3% {
+    transform: scale(1.2);
+    stroke-dashoffset: 0;
+  }
+  33.2% {
+    transform: scale(0.97);
+  }
+  33.9%, 100% {
+    transform: scale(1);
+    stroke-dashoffset: 0;
+  }
+}
+
+.pipeline-shield-check {
+  stroke-dasharray: 12;
+  transform-origin: 12px 12px;
+  animation: pipelineShieldCheckPop 9.6s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+/* Stage 3: Disbursement Desk - Bank Pillars & Roof Lift (Active at 51.4% - 56.6%) */
+@keyframes pipelineBankRoofFloat {
+  0%, 51.4% {
+    transform: translateY(0);
+  }
+  53.8% {
+    transform: translateY(-2.2px);
+  }
+  55.5% {
+    transform: translateY(0.3px);
+  }
+  56.6%, 100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes pipelineBankPillarRise {
+  0%, 51.4% {
+    transform: scaleY(1);
+  }
+  53.8% {
+    transform: scaleY(1.25);
+  }
+  55.5% {
+    transform: scaleY(0.97);
+  }
+  56.6%, 100% {
+    transform: scaleY(1);
+  }
+}
+
+.pipeline-landmark-roof {
+  animation: pipelineBankRoofFloat 9.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+.pipeline-landmark-p1 {
+  transform-origin: 6px 18px;
+  animation: pipelineBankPillarRise 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0s infinite;
+}
+.pipeline-landmark-p2 {
+  transform-origin: 10px 18px;
+  animation: pipelineBankPillarRise 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0.08s infinite;
+}
+.pipeline-landmark-p3 {
+  transform-origin: 14px 18px;
+  animation: pipelineBankPillarRise 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0.16s infinite;
+}
+.pipeline-landmark-p4 {
+  transform-origin: 18px 18px;
+  animation: pipelineBankPillarRise 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0.24s infinite;
+}
+
+/* Stage 4: Collections Hub - Receipt Content Lines Slide (Active at 74.1% - 79.3%) */
+@keyframes pipelineReceiptLineSlide {
+  0%, 74.1% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  76.2% {
+    transform: translateX(-3.5px);
+    opacity: 0.45;
+  }
+  78.2% {
+    transform: translateX(0.8px);
+    opacity: 1;
+  }
+  79.3%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.pipeline-receipt-l1 {
+  animation: pipelineReceiptLineSlide 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0s infinite;
+}
+.pipeline-receipt-l2 {
+  animation: pipelineReceiptLineSlide 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0.08s infinite;
+}
+.pipeline-receipt-l3 {
+  animation: pipelineReceiptLineSlide 9.6s cubic-bezier(0.25, 1, 0.5, 1) 0.16s infinite;
+}
+
+/* =========================================================================
+   Workspace Card Hover Micro-Animations (Smooth, 1.0s, 1x execution per hover)
+   ========================================================================= */
+
+/* Stage 1: TrendingUp Arrow Tip & Line Shoot */
+@keyframes arrowTipShoot {
+  0% {
+    transform: translate(0, 0);
+  }
+  38% {
+    transform: translate(3.5px, -3.5px);
+  }
+  70% {
+    transform: translate(-0.5px, 0.5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@keyframes chartLinePulse {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  45% {
+    stroke-dashoffset: -12;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.group:hover .hover-arrow-tip {
+  animation: arrowTipShoot 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0s 1 normal forwards;
+}
+.group:hover .hover-chart-line {
+  stroke-dasharray: 32;
+  animation: chartLinePulse 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0s 1 normal forwards;
+}
+
+/* Stage 2: ShieldCheck Checkmark Pop */
+@keyframes shieldCheckPop {
+  0% {
+    transform: scale(1);
+    stroke-dashoffset: 0;
+  }
+  30% {
+    transform: scale(0.7);
+    stroke-dashoffset: 12;
+  }
+  60% {
+    transform: scale(1.22);
+    stroke-dashoffset: 0;
+  }
+  82% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.group:hover .hover-shield-check {
+  stroke-dasharray: 12;
+  transform-origin: 12px 12px;
+  animation: shieldCheckPop 1.0s cubic-bezier(0.34, 1.56, 0.64, 1) 0s 1 normal forwards;
+}
+
+/* Stage 3: Landmark Bank Grounded Pillars & Roof Lift (Fixed geometry) */
+@keyframes bankRoofFloat {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-2.2px);
+  }
+  70% {
+    transform: translateY(0.3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bankPillarRise {
+  0% {
+    transform: scaleY(1);
+  }
+  35% {
+    transform: scaleY(1.25);
+  }
+  70% {
+    transform: scaleY(0.97);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.group:hover .hover-landmark-roof {
+  animation: bankRoofFloat 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0s 1 normal forwards;
+}
+.group:hover .hover-landmark-p1 {
+  transform-origin: 6px 18px;
+  animation: bankPillarRise 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.05s 1 normal forwards;
+}
+.group:hover .hover-landmark-p2 {
+  transform-origin: 10px 18px;
+  animation: bankPillarRise 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.10s 1 normal forwards;
+}
+.group:hover .hover-landmark-p3 {
+  transform-origin: 14px 18px;
+  animation: bankPillarRise 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.15s 1 normal forwards;
+}
+.group:hover .hover-landmark-p4 {
+  transform-origin: 18px 18px;
+  animation: bankPillarRise 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.20s 1 normal forwards;
+}
+
+/* Stage 4: ReceiptText Lines Sequential Slide */
+@keyframes receiptLineSlide {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  35% {
+    transform: translateX(-3.5px);
+    opacity: 0.4;
+  }
+  70% {
+    transform: translateX(0.8px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.group:hover .hover-receipt-l1 {
+  animation: receiptLineSlide 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0s 1 normal forwards;
+}
+.group:hover .hover-receipt-l2 {
+  animation: receiptLineSlide 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.08s 1 normal forwards;
+}
+.group:hover .hover-receipt-l3 {
+  animation: receiptLineSlide 1.0s cubic-bezier(0.25, 1, 0.5, 1) 0.16s 1 normal forwards;
+}
+
+/* Hotspot Dual Radar Waves (Ultra-Smooth Loop: Inner on -> Outer on -> Both Off -> Repeat) */
+@keyframes hotspotWaveInner {
+  0% {
+    opacity: 0.2;
+  }
+  30%, 60% {
+    opacity: 1;
+  }
+  85%, 100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes hotspotWaveOuter {
+  0%, 25% {
+    opacity: 0.2;
+  }
+  55%, 65% {
+    opacity: 1;
+  }
+  85%, 100% {
+    opacity: 0.2;
+  }
+}
+
+.animate-hotspot-arc-1 {
+  animation: hotspotWaveInner 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.animate-hotspot-arc-2 {
+  animation: hotspotWaveOuter 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

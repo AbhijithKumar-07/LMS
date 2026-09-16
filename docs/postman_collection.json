@@ -1,0 +1,802 @@
+{
+  "info": {
+    "_postman_id": "8f3b2a1c-9e4d-4c8a-b5e1-3d7f9a2b6e80",
+    "name": "Loan Management System (LMS) - Complete API Suite",
+    "description": "Production-grade Postman Collection for the full-stack Loan Management System. Covers borrower onboarding, multi-step credit application, underwriting desk, disbursement desk, collections ledger, and executive analytics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000",
+      "type": "string",
+      "description": "Base URL of the LMS backend server (http://localhost:4000)"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "Active JWT Bearer Token (auto-populated upon login)"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string",
+      "description": "Admin JWT Bearer Token"
+    },
+    {
+      "key": "borrowerToken",
+      "value": "",
+      "type": "string",
+      "description": "Borrower JWT Bearer Token"
+    },
+    {
+      "key": "loanId",
+      "value": "",
+      "type": "string",
+      "description": "Active Loan ID for lifecycle transitions (auto-populated upon loan application or manual entry)"
+    }
+  ],
+  "item": [
+    {
+      "name": "00. System Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check backend health status and MongoDB connectivity."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01. Authentication",
+      "item": [
+        {
+          "name": "Register New Borrower",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "    pm.collectionVariables.set('borrowerToken', res.token);",
+                  "    console.log('Borrower Token auto-saved');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul.sharma@example.com\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new borrower account with email and password."
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "    pm.collectionVariables.set('adminToken', res.token);",
+                  "    console.log('Admin Token auto-saved to {{token}} and {{adminToken}}');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@lms.test\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with default seeded Admin credentials. Auto-populates {{token}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Borrower",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "    pm.collectionVariables.set('borrowerToken', res.token);",
+                  "    console.log('Borrower Token auto-saved to {{token}} and {{borrowerToken}}');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"borrower@lms.test\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login as seeded borrower. Auto-populates {{token}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Sanction Officer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sanction@lms.test\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login as credit underwriting officer."
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Disbursement Officer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"disbursement@lms.test\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login as payout and treasury officer."
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Collection Officer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"collection@lms.test\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login as loan recovery and collections officer."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Retrieve profile details and RBAC role of the currently authenticated token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02. Borrower Portal",
+      "item": [
+        {
+          "name": "Get Application Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/application",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "application"]
+            },
+            "description": "Fetch current onboarding progress (Personal Details, Salary Slip, Active Application)."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 1: Save Personal Details & KYC",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pan\": \"ABCDE1234F\",\n  \"aadhaar\": \"123456789012\",\n  \"monthlyIncome\": 65000,\n  \"companyName\": \"Acme Technologies Ltd\",\n  \"address\": {\n    \"line1\": \"Flat 402, Green Meadows\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"pincode\": \"400001\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/personal-details",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "personal-details"]
+            },
+            "description": "Submit borrower KYC details, PAN, Aadhaar, and employer info."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 2: Upload Salary Slip Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "salarySlip",
+                  "type": "file",
+                  "description": "Select PDF, JPEG, or PNG salary slip (max 5MB)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/salary-slip",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "salary-slip"]
+            },
+            "description": "Upload authentic salary slip document."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 2b: Stream My Salary Slip",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/salary-slip/document",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "salary-slip", "document"]
+            },
+            "description": "Stream the uploaded salary slip document."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 3: Apply for Loan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.loan && res.loan._id) {",
+                  "    pm.collectionVariables.set('loanId', res.loan._id);",
+                  "    console.log('Loan ID auto-saved to {{loanId}}:', res.loan._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"principal\": 50000,\n  \"tenureDays\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/loans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "loans"]
+            },
+            "description": "Submit a loan application. The server checks eligibility via Business Rule Engine (BRE) and creates loan with Status APPLIED."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Loans List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/borrower/loans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "borrower", "loans"]
+            },
+            "description": "Fetch all historical and active loans for the authenticated borrower."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03. Executive Admin Analytics",
+      "item": [
+        {
+          "name": "Get Executive Admin Analytics & Activity Stream",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/admin/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "admin", "analytics"]
+            },
+            "description": "Retrieve comprehensive portfolio financial health KPIs, departmental queue volume metrics, status distributions, and the 10-item Live Operations Activity Stream."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04. Sales & Pipeline Desk",
+      "item": [
+        {
+          "name": "Get Prospect Leads",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sales/leads?tab=prospect",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sales", "leads"],
+              "query": [
+                {
+                  "key": "tab",
+                  "value": "prospect",
+                  "description": "Registered borrowers in intake who haven't applied yet"
+                }
+              ]
+            },
+            "description": "Retrieve prospect leads in the sales intake funnel."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Converted Applications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sales/leads?tab=converted",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sales", "leads"],
+              "query": [
+                {
+                  "key": "tab",
+                  "value": "converted",
+                  "description": "Borrowers who have applied for loans"
+                }
+              ]
+            },
+            "description": "Retrieve converted loan applications in the sales pipeline."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05. Sanction & Underwriting Desk",
+      "item": [
+        {
+          "name": "Get Pending Underwriting Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sanction/loans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sanction", "loans"]
+            },
+            "description": "Retrieve all loans with status APPLIED waiting for credit underwriting decisions."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sanction Decision History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sanction/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sanction", "history"]
+            },
+            "description": "Retrieve historical loan approvals and rejections."
+          },
+          "response": []
+        },
+        {
+          "name": "View Application Salary Slip Document",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/documents/{{loanId}}/salary-slip",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "documents", "{{loanId}}", "salary-slip"]
+            },
+            "description": "Stream the borrower's uploaded salary slip for underwriting inspection."
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Loan Sanction",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sanction/loans/{{loanId}}/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sanction", "loans", "{{loanId}}", "approve"]
+            },
+            "description": "Approve loan application. Updates status to SANCTIONED and transitions loan to the Disbursement Desk."
+          },
+          "response": []
+        },
+        {
+          "name": "Decline Loan Sanction",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"High debt-to-income ratio and unverified employment documents\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/sanction/loans/{{loanId}}/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "sanction", "loans", "{{loanId}}", "reject"]
+            },
+            "description": "Decline loan application with specified rejection reason. Updates status to REJECTED."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06. Disbursement Desk",
+      "item": [
+        {
+          "name": "Get Pending Disbursement Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/disbursement/loans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "disbursement", "loans"]
+            },
+            "description": "Retrieve all approved loans with status SANCTIONED awaiting payout release."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Disbursal History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/disbursement/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "disbursement", "history"]
+            },
+            "description": "Retrieve historical list of disbursed loans."
+          },
+          "response": []
+        },
+        {
+          "name": "Disburse Loan with UTR",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"utr\": \"DISB-984729184729\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/disbursement/loans/{{loanId}}/disburse",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "disbursement", "loans", "{{loanId}}", "disburse"]
+            },
+            "description": "Record banking payout UTR reference and release capital. Updates status to DISBURSED and activates loan in Collections ledger."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07. Collections & Recovery Hub",
+      "item": [
+        {
+          "name": "Get Active Loans Recovery Ledger",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/collection/loans",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "collection", "loans"]
+            },
+            "description": "Retrieve active running loans with status DISBURSED awaiting full or partial repayments."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Settled & NOC Archive",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/collection/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "collection", "history"]
+            },
+            "description": "Retrieve fully repaid and closed loans with NOC issuance records (Status: CLOSED)."
+          },
+          "response": []
+        },
+        {
+          "name": "Record Verified Repayment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50493,\n  \"utr\": \"PAY-482910482910\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/collection/loans/{{loanId}}/payments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "collection", "loans", "{{loanId}}", "payments"]
+            },
+            "description": "Log borrower repayment with UTR. If total repaid matches or exceeds total scheduled repayment, loan status automatically transitions to CLOSED."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
