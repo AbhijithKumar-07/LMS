@@ -32,6 +32,20 @@ export function createApp() {
   app.use(express.json());
   app.use(morgan("dev"));
 
+  app.get("/", (_req, res) => {
+    res.json({
+      name: "CreditSea Loan Management System API",
+      status: "active",
+      version: "1.0.0",
+      healthCheck: "/health",
+      apiEndpoints: {
+        auth: "/api/auth",
+        borrower: "/api/borrower",
+        dashboard: "/api/dashboard"
+      }
+    });
+  });
+
   app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
   });
