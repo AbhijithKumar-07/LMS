@@ -13,21 +13,9 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 
 ---
 
-## 🎥 Working Video Demonstration
-
-- **Live Application**: [https://lms-frontend-iyu8.onrender.com](https://lms-frontend-iyu8.onrender.com)
-- **Working Video Demo**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
-- **What is covered**:
-  - Full RBAC authentication (`ADMIN`, `SALES`, `SANCTION`, `DISBURSEMENT`, `COLLECTION`, `BORROWER`).
-  - Borrower Onboarding with live Business Rule Engine (BRE) validation & salary slip upload.
-  - Operations Command Center with real-time portfolio analytics & live activity audit stream.
-  - Credit underwriting workflow (Sanction / Rejection), Operations fund disbursement, and UTR collection with auto-closure.
-
----
-
 ## 📑 Table of Contents
 
-1. [Working Video Demonstration](#-working-video-demonstration)
+1. [Live Product Walkthrough & Deployment](#-live-product-walkthrough--deployment)
 2. [Key Features & Capabilities](#-key-features--capabilities)
 3. [Tech Stack Architecture](#-tech-stack-architecture)
 4. [System Prerequisites](#-system-prerequisites)
@@ -40,6 +28,18 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 11. [Business Rules Engine (BRE) & Financial Formulas](#-business-rules-engine-bre--financial-formulas)
 12. [Project Directory Layout](#-project-directory-layout)
 13. [Build & Verification](#-build--verification)
+
+---
+
+## 🎬 Live Product Walkthrough & Deployment
+
+- **Live Application**: [https://lms-frontend-iyu8.onrender.com](https://lms-frontend-iyu8.onrender.com)
+- **Video Walkthrough**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+- **Workflow Highlights**:
+  - Full RBAC authentication (`ADMIN`, `SALES`, `SANCTION`, `DISBURSEMENT`, `COLLECTION`, `BORROWER`).
+  - Borrower Onboarding with live Business Rule Engine (BRE) validation & salary slip upload.
+  - Operations Command Center with real-time portfolio analytics & live activity audit stream.
+  - Credit underwriting workflow (Sanction / Rejection), Operations fund disbursement, and UTR collection with auto-closure.
 
 ---
 
