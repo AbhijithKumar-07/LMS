@@ -120,7 +120,7 @@ export default function LoginPage() {
           </form>
 
           {/* Footer Link */}
-          <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
+          <div className="mt-5 pt-4 border-t border-slate-100 text-left text-xs text-slate-500">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
