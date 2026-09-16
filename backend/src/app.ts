@@ -40,50 +40,38 @@ export function createApp() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CreditSea LMS — Backend API</title>
+  <title>Loan Management System — API</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: rgba(17, 24, 39, 0.75);
-      --border: rgba(255, 255, 255, 0.08);
-      --primary: #3b82f6;
-      --accent: #10b981;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #059669;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 70%);
-      color: var(--text);
+      background: radial-gradient(circle at 50% 0%, #ffffff 0%, var(--bg) 100%);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
       position: relative;
-      overflow-x: hidden;
-    }
-    .glow-orb {
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
-      pointer-events: none;
     }
     .container {
       position: relative;
       z-index: 1;
-      max-width: 800px;
+      max-width: 780px;
       width: 100%;
     }
     .header {
@@ -94,12 +82,12 @@ export function createApp() {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #34d399;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
       padding: 0.35rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
+      font-size: 0.825rem;
       font-weight: 600;
       margin-bottom: 1.25rem;
     }
@@ -108,7 +96,7 @@ export function createApp() {
       height: 8px;
       background: #10b981;
       border-radius: 50%;
-      box-shadow: 0 0 10px #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -119,9 +107,7 @@ export function createApp() {
       font-size: 2.25rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
       margin-bottom: 0.75rem;
     }
     p.sub {
@@ -134,18 +120,16 @@ export function createApp() {
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 1.25rem;
+      border-radius: 1rem;
       padding: 1.75rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
       margin-bottom: 1.5rem;
     }
     .section-title {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #64748b;
+      color: var(--text-muted);
       font-weight: 700;
       margin-bottom: 1rem;
     }
@@ -155,28 +139,30 @@ export function createApp() {
       gap: 0.85rem;
     }
     .endpoint-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
       padding: 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.35rem;
       transition: all 0.2s ease;
       text-decoration: none;
       color: inherit;
     }
     .endpoint-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(59, 130, 246, 0.4);
+      background: #ffffff;
+      border-color: #93c5fd;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
       transform: translateY(-2px);
     }
     .endpoint-title {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.95rem;
+      font-size: 0.925rem;
       font-weight: 600;
+      color: var(--text-main);
     }
     .method-badge {
       font-family: 'JetBrains Mono', monospace;
@@ -184,8 +170,9 @@ export function createApp() {
       font-weight: 700;
       padding: 0.15rem 0.45rem;
       border-radius: 0.35rem;
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #dbeafe;
     }
     .endpoint-path {
       font-family: 'JetBrains Mono', monospace;
@@ -211,40 +198,40 @@ export function createApp() {
       transition: all 0.2s ease;
     }
     .btn-primary {
-      background: #2563eb;
-      color: white;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
     .btn-primary:hover {
-      background: #1d4ed8;
+      background: var(--primary-hover);
       transform: translateY(-1px);
     }
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
+      background: #ffffff;
+      color: #334155;
       border: 1px solid var(--border);
     }
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
     .footer {
       text-align: center;
       font-size: 0.8rem;
-      color: #64748b;
+      color: #94a3b8;
       margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="glow-orb"></div>
   <div class="container">
     <div class="header">
       <div class="badge">
         <span class="pulse-dot"></span>
-        API Engine Active & Healthy
+        API Service Active & Operational
       </div>
-      <h1>CreditSea LMS Engine</h1>
-      <p class="sub">Production RESTful API powering enterprise multi-role loan origination, BRE automated underwriting, and collection workflows.</p>
+      <h1>Loan Management System API</h1>
+      <p class="sub">Production RESTful API supporting borrower onboarding, BRE underwriting, sanctioning, disbursement, and repayment workflows.</p>
     </div>
 
     <div class="card">
@@ -287,7 +274,7 @@ export function createApp() {
     </div>
 
     <div class="footer">
-      CreditSea Loan Management System &bull; Version 1.0.0 &bull; Node.js + TypeScript + MongoDB
+      Loan Management System (LMS) &bull; Version 1.0.0 &bull; Node.js + TypeScript + MongoDB
     </div>
   </div>
 </body>
@@ -295,7 +282,7 @@ export function createApp() {
     }
 
     res.json({
-      name: "CreditSea Loan Management System API",
+      name: "Loan Management System API",
       status: "active",
       version: "1.0.0",
       healthCheck: "/health",

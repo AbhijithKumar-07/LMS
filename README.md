@@ -1,4 +1,4 @@
-# 🏦 CreditSea — Enterprise Loan Management System (LMS)
+# 🏦 Enterprise Loan Management System (LMS)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js)](https://nextjs.org/)
