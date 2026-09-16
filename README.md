@@ -17,7 +17,9 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 
 [![Watch Demo Video](https://img.shields.io/badge/🎥%20Google%20Drive-Watch%20Working%20Demo%20Video-blue?style=for-the-badge&logo=google-drive)](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
 
-- **Direct Video Link**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+- **Live Application**: [https://lms-frontend-iyu8.onrender.com](https://lms-frontend-iyu8.onrender.com)
+- **Working Video Demo (3–5 min)**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+- **GitHub Repository**: [https://github.com/AbhijithKumar-07/LMS](https://github.com/AbhijithKumar-07/LMS)
 - **What is covered**:
   - Full RBAC authentication (`ADMIN`, `SALES`, `SANCTION`, `DISBURSEMENT`, `COLLECTION`, `BORROWER`).
   - Borrower Onboarding with live Business Rule Engine (BRE) validation & salary slip upload.
