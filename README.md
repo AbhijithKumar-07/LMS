@@ -33,8 +33,8 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 
 ## 🎬 Live Product Walkthrough & Deployment
 
-- **Live Application**: [https://lms-frontend-iyu8.onrender.com](https://lms-frontend-iyu8.onrender.com)
-- **Video Walkthrough**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+- **Live Application**: <a href="https://lms-frontend-iyu8.onrender.com" target="_blank" rel="noopener noreferrer">https://lms-frontend-iyu8.onrender.com</a>
+- **Video Walkthrough**: <a href="https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing" target="_blank" rel="noopener noreferrer">https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing</a>
 - **Workflow Highlights**:
   - Full RBAC authentication (`ADMIN`, `SALES`, `SANCTION`, `DISBURSEMENT`, `COLLECTION`, `BORROWER`).
   - Borrower Onboarding with live Business Rule Engine (BRE) validation & salary slip upload.
