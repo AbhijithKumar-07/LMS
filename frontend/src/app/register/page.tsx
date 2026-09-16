@@ -47,16 +47,18 @@ export default function RegisterPage() {
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100/70 p-4 sm:p-6">
       <div className="w-full max-w-md">
         {/* Card Container */}
-        <div className="rounded-3xl border border-slate-200/80 bg-white p-8 sm:p-10 shadow-soft">
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-7 sm:p-9 shadow-soft">
           {/* Brand & Header */}
-          <div className="flex flex-col items-center text-center mb-8">
+          <div className="mb-7">
             <AppMark />
-            <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-900">
-              Create Borrower Account
-            </h1>
-            <p className="mt-1.5 text-sm text-slate-500">
-              Sign up to submit and track your loan applications
-            </p>
+            <div className="mt-6 pt-5 border-t border-slate-100">
+              <h1 className="text-2xl font-black tracking-tight text-slate-900">
+                Create Borrower Account
+              </h1>
+              <p className="mt-1 text-xs sm:text-sm text-slate-500">
+                Sign up to submit and track your loan applications
+              </p>
+            </div>
           </div>
 
           {/* Form */}
