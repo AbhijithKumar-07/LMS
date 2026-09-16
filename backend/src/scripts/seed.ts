@@ -26,7 +26,7 @@ async function seed() {
   await connectDb();
 
   for (const seedUser of seedUsers) {
-    const passwordHash = await bcrypt.hash(seedUser.password, 12);
+    const passwordHash = await bcrypt.hash(seedUser.password, 10);
     await User.findOneAndUpdate(
       { email: seedUser.email },
       {

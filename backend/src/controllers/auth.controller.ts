@@ -27,7 +27,7 @@ function publicUser(user: { _id: unknown; name: string; email: string; role: str
 
 export const register = asyncHandler(async (req, res) => {
   const input = registerSchema.parse(req.body);
-  const passwordHash = await bcrypt.hash(input.password, 12);
+  const passwordHash = await bcrypt.hash(input.password, 10);
   const user = await User.create({
     name: input.name,
     email: input.email,

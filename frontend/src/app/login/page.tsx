@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { SyntheticEvent, useState } from "react";
-import { apiRequest } from "@/lib/api";
+import { SyntheticEvent, useEffect, useState } from "react";
+import { apiRequest, warmUpBackend } from "@/lib/api";
 import { clearAuth, saveAuth } from "@/lib/auth";
 import type { AuthResponse } from "@/types";
 import { buttonClass, Field, inputClass, Notice } from "@/components/ui";
@@ -21,6 +21,10 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    warmUpBackend();
+  }, []);
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();

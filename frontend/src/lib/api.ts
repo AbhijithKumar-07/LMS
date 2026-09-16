@@ -4,6 +4,16 @@ type ApiOptions = RequestInit & {
   token?: string | null;
 };
 
+export function warmUpBackend() {
+  if (typeof window === "undefined") return;
+  try {
+    const healthUrl = API_BASE_URL.replace(/\/api$/, "") + "/health";
+    fetch(healthUrl, { method: "GET", mode: "cors", cache: "no-store" }).catch(() => {});
+  } catch {
+    // silently catch pre-warmup pings
+  }
+}
+
 export async function apiRequest<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const headers = new Headers(options.headers);
 
