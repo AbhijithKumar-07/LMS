@@ -52,9 +52,9 @@ export default function LoginPage() {
         {/* Card Container */}
         <div className="rounded-3xl border border-slate-200/80 bg-white p-7 sm:p-9 shadow-soft">
           {/* Brand & Header */}
-          <div className="mb-7">
+          <div className="mb-5">
             <AppMark />
-            <div className="mt-6 pt-5 border-t border-slate-100">
+            <div className="mt-3.5 pt-3.5 border-t border-slate-100">
               <h1 className="text-2xl font-black tracking-tight text-slate-900">
                 Sign In
               </h1>
