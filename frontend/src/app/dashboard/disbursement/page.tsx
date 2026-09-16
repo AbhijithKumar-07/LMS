@@ -22,12 +22,15 @@ import {
   buttonClass,
   inputClass,
   MetricCard,
+  MetricSkeleton,
   Notice,
   secondaryButtonClass,
-  StatusBadge
+  StatusBadge,
+  TableSkeleton
 } from "@/components/ui";
 import { apiRequest, formatCurrency, formatDate } from "@/lib/api";
 import { getToken } from "@/lib/auth";
+import { getLocalCache, setLocalCache } from "@/lib/cache";
 import { API_BASE_URL } from "@/lib/config";
 import type { Loan } from "@/types";
 
@@ -45,9 +48,10 @@ export default function DisbursementPage() {
 
 function DisbursementModule() {
   const [activeTab, setActiveTab] = useState<"QUEUE" | "HISTORY">("QUEUE");
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [historyLoans, setHistoryLoans] = useState<Loan[]>([]);
+  const [loans, setLoans] = useState<Loan[]>(() => getLocalCache<Loan[]>("lms_cache_disbursement_loans") || []);
+  const [historyLoans, setHistoryLoans] = useState<Loan[]>(() => getLocalCache<Loan[]>("lms_cache_disbursement_history") || []);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(() => !getLocalCache<Loan[]>("lms_cache_disbursement_loans"));
   const [historyLoading, setHistoryLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,7 +89,9 @@ function DisbursementModule() {
       const response = await apiRequest<{ loans: Loan[] }>("/dashboard/disbursement/loans", {
         token: getToken()
       });
-      setLoans(response.loans);
+      const fetched = response.loans || [];
+      setLoans(fetched);
+      setLocalCache("lms_cache_disbursement_loans", fetched);
     } catch (caught) {
       setMessage({
         type: "error",
@@ -93,6 +99,7 @@ function DisbursementModule() {
       });
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   }
 
@@ -102,7 +109,9 @@ function DisbursementModule() {
       const response = await apiRequest<{ history: Loan[] }>("/dashboard/disbursement/history", {
         token: getToken()
       });
-      setHistoryLoans(response.history);
+      const fetched = response.history || [];
+      setHistoryLoans(fetched);
+      setLocalCache("lms_cache_disbursement_history", fetched);
     } catch (caught) {
       setMessage({
         type: "error",

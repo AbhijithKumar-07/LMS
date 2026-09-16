@@ -23,9 +23,10 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AuthGate } from "@/components/AuthGate";
-import { MetricCard, Notice, secondaryButtonClass, StatusBadge } from "@/components/ui";
+import { MetricCard, MetricSkeleton, Notice, secondaryButtonClass, StatusBadge, TableSkeleton } from "@/components/ui";
 import { apiRequest, formatCurrency, formatDate } from "@/lib/api";
 import { getToken } from "@/lib/auth";
+import { getLocalCache, setLocalCache } from "@/lib/cache";
 
 type ApplicationDraft = {
   fullName?: string;
@@ -105,11 +106,12 @@ function getLeadStatus(lead: Lead) {
 }
 
 function SalesModule() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [converted, setConverted] = useState<ConvertedBorrower[]>([]);
+  const [leads, setLeads] = useState<Lead[]>(() => getLocalCache<Lead[]>("lms_cache_sales_leads") || []);
+  const [converted, setConverted] = useState<ConvertedBorrower[]>(() => getLocalCache<ConvertedBorrower[]>("lms_cache_sales_converted") || []);
   const [activeTab, setActiveTab] = useState<"PROSPECTS" | "CONVERTED">("PROSPECTS");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(() => !getLocalCache<Lead[]>("lms_cache_sales_leads"));
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PENDING_ONBOARDING" | "IN_PROGRESS" | "READY">("ALL");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -146,12 +148,17 @@ function SalesModule() {
           token: getToken()
         }
       );
-      setLeads(Array.isArray(response?.leads) ? response.leads : []);
-      setConverted(Array.isArray(response?.converted) ? response.converted : []);
+      const fetchedLeads = Array.isArray(response?.leads) ? response.leads : [];
+      const fetchedConverted = Array.isArray(response?.converted) ? response.converted : [];
+      setLeads(fetchedLeads);
+      setConverted(fetchedConverted);
+      setLocalCache("lms_cache_sales_leads", fetchedLeads);
+      setLocalCache("lms_cache_sales_converted", fetchedConverted);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Failed to load sales leads.");
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   }
 

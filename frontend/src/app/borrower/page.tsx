@@ -44,6 +44,14 @@ function calculateRepayment(principal: number, tenureDays: number) {
 
 const lifecycleSteps: LoanStatus[] = ["APPLIED", "SANCTIONED", "DISBURSED", "CLOSED"];
 
+import { getLocalCache, setLocalCache } from "@/lib/cache";
+
+type BorrowerCachedData = {
+  application?: any;
+  loans?: Loan[];
+  currentStep?: 1 | 2 | 3 | 4;
+};
+
 export default function BorrowerPage() {
   return (
     <AuthGate allow={["BORROWER"]}>
@@ -57,7 +65,10 @@ export default function BorrowerPage() {
 }
 
 function BorrowerPortal({ user }: { user: User }) {
+  const cacheKey = `lms_cache_borrower_${user?.id || user?.email || "default"}`;
   const draftKey = `lms_borrower_draft_${user?.id || user?.email || "default"}`;
+
+  const cached = getLocalCache<BorrowerCachedData>(cacheKey);
 
   const [currentStep, setCurrentStepState] = useState<1 | 2 | 3 | 4>(() => {
     if (typeof window !== "undefined") {
@@ -70,6 +81,9 @@ function BorrowerPortal({ user }: { user: User }) {
         // Ignore
       }
     }
+    if (cached?.loans && cached.loans.length > 0) return 4;
+    if (cached?.application?.salarySlip?.originalName) return 3;
+    if (cached?.application?.eligibilityPassed) return 2;
     return 1;
   });
 
@@ -98,22 +112,32 @@ function BorrowerPortal({ user }: { user: User }) {
     return () => clearTimeout(timer);
   }, [message]);
 
-  const [loans, setLoans] = useState<Loan[]>([]);
+  const [loans, setLoans] = useState<Loan[]>(() => cached?.loans || []);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(() => !cached);
   const [principal, setPrincipal] = useState(100000);
   const [tenureDays, setTenureDays] = useState(90);
   const [salarySlip, setSalarySlip] = useState<File | null>(null);
-  const [slipFileName, setSlipFileName] = useState("");
+  const [slipFileName, setSlipFileName] = useState(() => cached?.application?.salarySlip?.originalName || "");
 
   // Form states initialized clean per user
-  const [fullNameInput, setFullNameInput] = useState(user?.name || "");
-  const [panInput, setPanInput] = useState("");
-  const [dobInput, setDobInput] = useState("");
-  const [salaryInput, setSalaryInput] = useState("");
-  const [employmentInput, setEmploymentInput] = useState("SALARIED");
-  const [eligibilityPassed, setEligibilityPassed] = useState(false);
-  const [slipUploaded, setSlipUploaded] = useState(false);
-  const [loanApplied, setLoanApplied] = useState(false);
+  const [fullNameInput, setFullNameInput] = useState(() => cached?.application?.fullName || user?.name || "");
+  const [panInput, setPanInput] = useState(() => cached?.application?.pan || "");
+  const [dobInput, setDobInput] = useState(() => {
+    if (cached?.application?.dateOfBirth) {
+      try {
+        return new Date(cached.application.dateOfBirth).toISOString().split("T")[0];
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  });
+  const [salaryInput, setSalaryInput] = useState(() => (cached?.application?.monthlySalary ? String(cached.application.monthlySalary) : ""));
+  const [employmentInput, setEmploymentInput] = useState(() => cached?.application?.employmentMode || "SALARIED");
+  const [eligibilityPassed, setEligibilityPassed] = useState(() => Boolean(cached?.application?.eligibilityPassed));
+  const [slipUploaded, setSlipUploaded] = useState(() => Boolean(cached?.application?.salarySlip?.originalName || cached?.application?.salarySlip?.path));
+  const [loanApplied, setLoanApplied] = useState(() => (cached?.loans && cached.loans.length > 0) || false);
 
   // Helper to persist current in-progress application draft
   const saveDraft = (overrides?: Record<string, any>) => {
@@ -195,6 +219,17 @@ function BorrowerPortal({ user }: { user: User }) {
           }
           const hasSubmittedLoan = loansRes.status === "fulfilled" && (loansRes.value?.loans?.length ?? 0) > 0;
           setLoanApplied(hasSubmittedLoan);
+
+          if (hasSubmittedLoan && (!sessionStorage.getItem("lms_borrower_step") || sessionStorage.getItem("lms_borrower_step") === "1")) {
+            setCurrentStepState(4);
+          }
+
+          // Cache current backend state
+          setLocalCache(cacheKey, {
+            application: app,
+            loans: loansRes.status === "fulfilled" ? loansRes.value.loans : [],
+            currentStep: hasSubmittedLoan ? 4 : (app.salarySlip?.originalName ? 3 : (app.eligibilityPassed ? 2 : 1))
+          });
         } else {
           // Fresh account with no application yet
           setFullNameInput(user?.name || "");
@@ -206,6 +241,7 @@ function BorrowerPortal({ user }: { user: User }) {
           setSlipUploaded(false);
           setSlipFileName("");
           setLoanApplied(false);
+          setLocalCache(cacheKey, { application: null, loans: [] });
         }
       } catch {
         if (isCancelled) return;
@@ -218,6 +254,10 @@ function BorrowerPortal({ user }: { user: User }) {
         setSlipUploaded(false);
         setSlipFileName("");
         setLoanApplied(false);
+      } finally {
+        if (!isCancelled) {
+          setInitialLoading(false);
+        }
       }
     }
 

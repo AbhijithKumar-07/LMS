@@ -34,9 +34,10 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AuthGate } from "@/components/AuthGate";
-import { MetricCard, Notice, secondaryButtonClass, StatusBadge } from "@/components/ui";
+import { MetricCard, MetricSkeleton, Notice, secondaryButtonClass, Skeleton, StatusBadge, TableSkeleton } from "@/components/ui";
 import { apiRequest, formatCurrency, formatDate } from "@/lib/api";
 import { getToken } from "@/lib/auth";
+import { getLocalCache, setLocalCache } from "@/lib/cache";
 import type { AdminAnalytics, Role } from "@/types";
 
 function getRelativeTime(dateInput: string | Date) {
@@ -262,8 +263,11 @@ export default function DashboardPage() {
 }
 
 function ExecutiveDashboard({ user }: { user: any }) {
-  const [analytics, setAnalytics] = useState<AdminAnalytics | null>(null);
+  const [analytics, setAnalytics] = useState<AdminAnalytics | null>(() =>
+    getLocalCache<AdminAnalytics>("lms_cache_admin_analytics")
+  );
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(() => !getLocalCache<AdminAnalytics>("lms_cache_admin_analytics"));
   const [error, setError] = useState("");
   const [activityFilter, setActivityFilter] = useState<"ALL" | "PAYMENT" | "SANCTION" | "DISBURSEMENT" | "APPLICATION">("ALL");
   const [feedSearch, setFeedSearch] = useState("");
@@ -279,10 +283,12 @@ function ExecutiveDashboard({ user }: { user: any }) {
         token: getToken()
       });
       setAnalytics(res.analytics);
+      setLocalCache("lms_cache_admin_analytics", res.analytics);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Failed to load admin analytics.");
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   }
 

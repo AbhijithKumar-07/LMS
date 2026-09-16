@@ -26,13 +26,16 @@ import {
   buttonClass,
   inputClass,
   MetricCard,
+  MetricSkeleton,
   Notice,
   ProgressBar,
   secondaryButtonClass,
-  StatusBadge
+  StatusBadge,
+  TableSkeleton
 } from "@/components/ui";
 import { apiRequest, formatCurrency, formatDate } from "@/lib/api";
 import { getToken } from "@/lib/auth";
+import { getLocalCache, setLocalCache } from "@/lib/cache";
 import type { Loan } from "@/types";
 
 export default function CollectionPage() {
@@ -48,10 +51,11 @@ export default function CollectionPage() {
 }
 
 function CollectionModule() {
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [history, setHistory] = useState<Loan[]>([]);
+  const [loans, setLoans] = useState<Loan[]>(() => getLocalCache<Loan[]>("lms_cache_collection_loans") || []);
+  const [history, setHistory] = useState<Loan[]>(() => getLocalCache<Loan[]>("lms_cache_collection_history") || []);
   const [activeTab, setActiveTab] = useState<"ACTIVE" | "HISTORY">("ACTIVE");
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(() => !getLocalCache<Loan[]>("lms_cache_collection_loans"));
   const [recordingId, setRecordingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState<{
@@ -95,8 +99,12 @@ function CollectionModule() {
           token: getToken()
         })
       ]);
-      setLoans(loansRes.loans || []);
-      setHistory(historyRes.history || []);
+      const fetchedLoans = loansRes.loans || [];
+      const fetchedHistory = historyRes.history || [];
+      setLoans(fetchedLoans);
+      setHistory(fetchedHistory);
+      setLocalCache("lms_cache_collection_loans", fetchedLoans);
+      setLocalCache("lms_cache_collection_history", fetchedHistory);
     } catch (caught) {
       setMessage({
         type: "error",
@@ -104,6 +112,7 @@ function CollectionModule() {
       });
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   }
 
