@@ -13,20 +13,34 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 
 ---
 
+## 🎥 Working Video Demonstration (3-5 min)
+
+[![Watch Demo Video](https://img.shields.io/badge/🎥%20Google%20Drive-Watch%20Working%20Demo%20Video-blue?style=for-the-badge&logo=google-drive)](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+
+- **Direct Video Link**: [https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing](https://drive.google.com/file/d/1IXXcOU3P6eP3X1Rf_tMjVWZtX9iiE64X/view?usp=sharing)
+- **What is covered**:
+  - Full RBAC authentication (`ADMIN`, `SALES`, `SANCTION`, `DISBURSEMENT`, `COLLECTION`, `BORROWER`).
+  - Borrower Onboarding with live Business Rule Engine (BRE) validation & salary slip upload.
+  - Operations Command Center with real-time portfolio analytics & live activity audit stream.
+  - Credit underwriting workflow (Sanction / Rejection), Operations fund disbursement, and UTR collection with auto-closure.
+
+---
+
 ## 📑 Table of Contents
 
-1. [Key Features & Capabilities](#-key-features--capabilities)
-2. [Tech Stack Architecture](#-tech-stack-architecture)
-3. [System Prerequisites](#-system-prerequisites)
-4. [Step-by-Step Setup Guide](#-step-by-step-setup-guide)
-5. [Evaluator Demo Credentials](#-evaluator-demo-credentials)
-6. [Complete End-to-End Review Walkthrough](#-complete-end-to-end-review-walkthrough)
-7. [Database Architecture & ERD](#-database-architecture--erd)
-8. [API Endpoints Reference](#-api-endpoints-reference)
-9. [Postman Collection & API Testing](#-postman-collection--api-testing)
-10. [Business Rules Engine (BRE) & Financial Formulas](#-business-rules-engine-bre--financial-formulas)
-11. [Project Directory Layout](#-project-directory-layout)
-12. [Build & Verification](#-build--verification)
+1. [Working Video Demonstration](#-working-video-demonstration-3-5-min)
+2. [Key Features & Capabilities](#-key-features--capabilities)
+3. [Tech Stack Architecture](#-tech-stack-architecture)
+4. [System Prerequisites](#-system-prerequisites)
+5. [Step-by-Step Setup Guide](#-step-by-step-setup-guide)
+6. [Evaluator Demo Credentials](#-evaluator-demo-credentials)
+7. [Complete End-to-End Review Walkthrough](#-complete-end-to-end-review-walkthrough)
+8. [Database Architecture & ERD](#-database-architecture--erd)
+9. [API Endpoints Reference](#-api-endpoints-reference)
+10. [Postman Collection & API Testing](#-postman-collection--api-testing)
+11. [Business Rules Engine (BRE) & Financial Formulas](#-business-rules-engine-bre--financial-formulas)
+12. [Project Directory Layout](#-project-directory-layout)
+13. [Build & Verification](#-build--verification)
 
 ---
 
