@@ -67,7 +67,7 @@ An enterprise-grade, full-stack **Loan Management System (LMS)** designed for di
 | **Styling** | Tailwind CSS 3.4, Lucide Icons | Custom design system, responsive glassmorphism |
 | **Backend API**| Node.js 20+, Express.js 4.21, TypeScript | RESTful API, Modular Controller-Service architecture |
 | **Database** | MongoDB 7.0, Mongoose 8.9 | Indexed document store with schema validation |
-| **Auth & Security** | JWT (`jsonwebtoken`), `bcryptjs`, `helmet`, `cors` | Stateless bearer token auth with salt rounds |
+| **Auth & Security** | JWT (`jsonwebtoken`), `bcryptjs`, `cors` | Stateless bearer token auth with salt rounds |
 | **File Processing**| Multer | Multipart/form-data parser for salary slip proofs |
 | **DevOps & QA** | Docker Compose, Postman v2.1.0 Collection | Containerized DB setup and end-to-end API automation |
 
