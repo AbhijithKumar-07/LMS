@@ -322,45 +322,53 @@ function SanctionModule() {
       {message && <Notice type={message.type} message={message.text} title={message.title} />}
 
       {/* KPI Stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <MetricCard
-          label="Pending Sanction"
-          value={loans.length}
-          subtitle="Applied loans waiting review"
-          icon={Layers}
-          color="amber"
-        />
-        <MetricCard
-          label="Total Queue Value"
-          value={formatCurrency(totalQueueValue)}
-          subtitle="Cumulative pending principal"
-          icon={Wallet}
-          color="brand"
-        />
-
-        {/* Processed History Card aligned with other MetricCards */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft transition-all duration-200 hover:shadow-card-hover">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Processed History</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-              <History className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-              {totalSanctionedCount} Approved
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-rose-50 px-2.5 py-1 text-xs font-bold text-rose-700 ring-1 ring-inset ring-rose-600/20">
-              <XCircle className="h-3.5 w-3.5 text-rose-600" />
-              {totalRejectedCount} Rejected
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-slate-500">
-            Total volume: <span className="font-semibold text-slate-700">{formatCurrency(totalSanctionedVolume)}</span>
-          </p>
+      {initialLoading && loans.length === 0 && historyLoans.length === 0 ? (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
         </div>
-      </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <MetricCard
+            label="Pending Sanction"
+            value={loans.length}
+            subtitle="Applied loans waiting review"
+            icon={Layers}
+            color="amber"
+          />
+          <MetricCard
+            label="Total Queue Value"
+            value={formatCurrency(totalQueueValue)}
+            subtitle="Cumulative pending principal"
+            icon={Wallet}
+            color="brand"
+          />
+
+          {/* Processed History Card aligned with other MetricCards */}
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft transition-all duration-200 hover:shadow-card-hover">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Processed History</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                <History className="h-5 w-5" />
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                {totalSanctionedCount} Approved
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-rose-50 px-2.5 py-1 text-xs font-bold text-rose-700 ring-1 ring-inset ring-rose-600/20">
+                <XCircle className="h-3.5 w-3.5 text-rose-600" />
+                {totalRejectedCount} Rejected
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-slate-500">
+              Total volume: <span className="font-semibold text-slate-700">{formatCurrency(totalSanctionedVolume)}</span>
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Tab Content 1: Active Queue */}
       {activeTab === "QUEUE" && (
@@ -374,7 +382,9 @@ function SanctionModule() {
             </div>
           </div>
 
-          {loans.length === 0 ? (
+          {initialLoading && loans.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : loans.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <ShieldCheck className="h-6 w-6" />
@@ -615,7 +625,9 @@ function SanctionModule() {
             </div>
           </div>
 
-          {filteredHistory.length === 0 ? (
+          {initialLoading && historyLoans.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : filteredHistory.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <History className="h-6 w-6" />

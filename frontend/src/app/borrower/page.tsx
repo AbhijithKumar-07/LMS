@@ -22,6 +22,7 @@ import { AppShell } from "@/components/AppShell";
 import { AuthGate } from "@/components/AuthGate";
 import {
   buttonClass,
+  BorrowerPortalSkeleton,
   Field,
   inputClass,
   selectClass,
@@ -220,15 +221,24 @@ function BorrowerPortal({ user }: { user: User }) {
           const hasSubmittedLoan = loansRes.status === "fulfilled" && (loansRes.value?.loans?.length ?? 0) > 0;
           setLoanApplied(hasSubmittedLoan);
 
-          if (hasSubmittedLoan && (!sessionStorage.getItem("lms_borrower_step") || sessionStorage.getItem("lms_borrower_step") === "1")) {
+          const savedStep = sessionStorage.getItem("lms_borrower_step");
+          if (savedStep) {
+            const stepNum = Number(savedStep);
+            if (stepNum >= 1 && stepNum <= 4) {
+              setCurrentStepState(stepNum as 1 | 2 | 3 | 4);
+            }
+          } else if (hasSubmittedLoan) {
             setCurrentStepState(4);
+            try {
+              sessionStorage.setItem("lms_borrower_step", "4");
+            } catch {}
           }
 
           // Cache current backend state
           setLocalCache(cacheKey, {
             application: app,
             loans: loansRes.status === "fulfilled" ? loansRes.value.loans : [],
-            currentStep: hasSubmittedLoan ? 4 : (app.salarySlip?.originalName ? 3 : (app.eligibilityPassed ? 2 : 1))
+            currentStep: savedStep ? Number(savedStep) : (hasSubmittedLoan ? 4 : (app.salarySlip?.originalName ? 3 : (app.eligibilityPassed ? 2 : 1)))
           });
         } else {
           // Fresh account with no application yet
@@ -467,6 +477,10 @@ function BorrowerPortal({ user }: { user: User }) {
       isAccessible: loanApplied || loans.length > 0
     }
   ];
+
+  if (initialLoading && !cached) {
+    return <BorrowerPortalSkeleton />;
+  }
 
   return (
     <div className="space-y-6">

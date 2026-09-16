@@ -318,36 +318,45 @@ function SalesModule() {
       {error && <Notice type="error" message={error} />}
 
       {/* KPI Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-        <MetricCard
-          label="Pending Onboarding"
-          value={pendingOnboardingCount}
-          subtitle="Account created, setup pending"
-          icon={UserPlus}
-          color="sky"
-        />
-        <MetricCard
-          label="KYC In Progress"
-          value={inProgressCount}
-          subtitle="Drafting personal details"
-          icon={FileEdit}
-          color="brand"
-        />
-        <MetricCard
-          label="Ready to Apply"
-          value={readyCount}
-          subtitle="KYC verified & docs ready"
-          icon={CheckCircle2}
-          color="emerald"
-        />
-        <MetricCard
-          label="Converted to Application"
-          value={converted.length}
-          subtitle="Successfully applied"
-          icon={UserCheck}
-          color="emerald"
-        />
-      </div>
+      {initialLoading && leads.length === 0 && converted.length === 0 ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <MetricCard
+            label="Pending Onboarding"
+            value={pendingOnboardingCount}
+            subtitle="Account created, setup pending"
+            icon={UserPlus}
+            color="sky"
+          />
+          <MetricCard
+            label="KYC In Progress"
+            value={inProgressCount}
+            subtitle="Drafting personal details"
+            icon={FileEdit}
+            color="brand"
+          />
+          <MetricCard
+            label="Ready to Apply"
+            value={readyCount}
+            subtitle="KYC verified & docs ready"
+            icon={CheckCircle2}
+            color="emerald"
+          />
+          <MetricCard
+            label="Converted to Application"
+            value={converted.length}
+            subtitle="Successfully applied"
+            icon={UserCheck}
+            color="emerald"
+          />
+        </div>
+      )}
 
       {/* TAB 1: PROSPECT LEADS */}
       {activeTab === "PROSPECTS" && (
@@ -424,7 +433,9 @@ function SalesModule() {
             </div>
           </div>
 
-          {filteredLeads.length === 0 ? (
+          {initialLoading && leads.length === 0 ? (
+            <TableSkeleton rows={4} />
+          ) : filteredLeads.length === 0 ? (
             <div className="py-12 sm:py-14 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <Users className="h-6 w-6" />
@@ -684,7 +695,9 @@ function SalesModule() {
             </div>
           </div>
 
-          {filteredConverted.length === 0 ? (
+          {initialLoading && converted.length === 0 ? (
+            <TableSkeleton rows={4} />
+          ) : filteredConverted.length === 0 ? (
             <div className="py-12 sm:py-14 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <UserCheck className="h-6 w-6 text-slate-400" />

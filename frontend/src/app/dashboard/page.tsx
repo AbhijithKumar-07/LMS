@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AuthGate } from "@/components/AuthGate";
-import { MetricCard, MetricSkeleton, Notice, secondaryButtonClass, Skeleton, StatusBadge, TableSkeleton } from "@/components/ui";
+import { MetricCard, MetricSkeleton, Notice, secondaryButtonClass, Skeleton, StatusBadge, TableSkeleton, FeedSkeleton } from "@/components/ui";
 import { apiRequest, formatCurrency, formatDate } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import { getLocalCache, setLocalCache } from "@/lib/cache";
@@ -506,45 +506,57 @@ function ExecutiveDashboard({ user }: { user: any }) {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
-              <MetricCard
-                label="Total Disbursed"
-                value={formatCurrency(analytics?.financials?.totalDisbursed || 0)}
-                subtitle="Cumulative capital released"
-                icon={Landmark}
-                color="sky"
-              />
-              <MetricCard
-                label="Active Outstanding"
-                value={formatCurrency(analytics?.financials?.totalOutstanding || 0)}
-                subtitle="Principal under recovery"
-                icon={Clock}
-                color="amber"
-              />
-              <MetricCard
-                label="Recovered Capital"
-                value={formatCurrency(analytics?.financials?.totalRepaid || 0)}
-                subtitle="Verified UTR collections"
-                icon={CheckCircle2}
-                color="emerald"
-              />
-              <MetricCard
-                label="Collection Efficiency"
-                value={`${analytics?.financials?.recoveryRate || 0}%`}
-                subtitle="Total repaid vs scheduled"
-                icon={TrendingUp}
-                color="emerald"
-              />
-              <div className="col-span-2 lg:col-span-1">
-                <MetricCard
-                  label="Interest Yield"
-                  value={formatCurrency(analytics?.financials?.totalInterest || 0)}
-                  subtitle="Interest revenue accrued"
-                  icon={ReceiptText}
-                  color="brand"
-                />
+            {initialLoading && !analytics ? (
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
+                <MetricSkeleton />
+                <MetricSkeleton />
+                <MetricSkeleton />
+                <MetricSkeleton />
+                <div className="col-span-2 lg:col-span-1">
+                  <MetricSkeleton />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
+                <MetricCard
+                  label="Total Disbursed"
+                  value={formatCurrency(analytics?.financials?.totalDisbursed || 0)}
+                  subtitle="Cumulative capital released"
+                  icon={Landmark}
+                  color="sky"
+                />
+                <MetricCard
+                  label="Active Outstanding"
+                  value={formatCurrency(analytics?.financials?.totalOutstanding || 0)}
+                  subtitle="Principal under recovery"
+                  icon={Clock}
+                  color="amber"
+                />
+                <MetricCard
+                  label="Recovered Capital"
+                  value={formatCurrency(analytics?.financials?.totalRepaid || 0)}
+                  subtitle="Verified UTR collections"
+                  icon={CheckCircle2}
+                  color="emerald"
+                />
+                <MetricCard
+                  label="Collection Efficiency"
+                  value={`${analytics?.financials?.recoveryRate || 0}%`}
+                  subtitle="Total repaid vs scheduled"
+                  icon={TrendingUp}
+                  color="emerald"
+                />
+                <div className="col-span-2 lg:col-span-1">
+                  <MetricCard
+                    label="Interest Yield"
+                    value={formatCurrency(analytics?.financials?.totalInterest || 0)}
+                    subtitle="Interest revenue accrued"
+                    icon={ReceiptText}
+                    color="brand"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* SECTION 2: Departmental Queues & Workloads */}
@@ -561,95 +573,114 @@ function ExecutiveDashboard({ user }: { user: any }) {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-              {/* Sales Queue */}
-              <Link
-                href="/dashboard/sales"
-                className="group rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-blue-400 hover:shadow-soft transition-all"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-blue-800">
-                    Sales Funnel
-                  </span>
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+            {initialLoading && !analytics ? (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+                <Skeleton className="h-28 rounded-2xl" />
+                <Skeleton className="h-28 rounded-2xl" />
+                <Skeleton className="h-28 rounded-2xl" />
+                <Skeleton className="h-28 rounded-2xl" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+                {/* Sales Queue */}
+                <Link
+                  href="/dashboard/sales"
+                  className="group rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-blue-400 hover:shadow-soft transition-all"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-blue-800">
+                      Sales Funnel
+                    </span>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl font-black text-slate-900">
-                  {analytics?.queues?.sales?.count || 0}
-                </div>
-                <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
-                  Prospect leads in intake
-                </span>
-              </Link>
+                  <div className="text-xl sm:text-2xl font-black text-slate-900">
+                    {analytics?.queues?.sales?.count || 0}
+                  </div>
+                  <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
+                    Prospect leads in intake
+                  </span>
+                </Link>
 
-              {/* Sanction Queue */}
-              <Link
-                href="/dashboard/sanction"
-                className="group rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-amber-400 hover:shadow-soft transition-all"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-800">
-                    Underwriting
-                  </span>
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-100 text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                {/* Sanction Queue */}
+                <Link
+                  href="/dashboard/sanction"
+                  className="group rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-amber-400 hover:shadow-soft transition-all"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-800">
+                      Underwriting
+                    </span>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-100 text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl font-black text-slate-900">
-                  {analytics?.queues?.sanction?.count || 0}
-                </div>
-                <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
-                  {formatCurrency(analytics?.queues?.sanction?.volume || 0)} awaiting review
-                </span>
-              </Link>
+                  <div className="text-xl sm:text-2xl font-black text-slate-900">
+                    {analytics?.queues?.sanction?.count || 0}
+                  </div>
+                  <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
+                    {formatCurrency(analytics?.queues?.sanction?.volume || 0)} awaiting review
+                  </span>
+                </Link>
 
-              {/* Disbursement Queue */}
-              <Link
-                href="/dashboard/disbursement"
-                className="group rounded-2xl border border-cyan-200/80 bg-gradient-to-br from-cyan-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-cyan-400 hover:shadow-soft transition-all"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-cyan-800">
-                    Disbursement
-                  </span>
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                {/* Disbursement Queue */}
+                <Link
+                  href="/dashboard/disbursement"
+                  className="group rounded-2xl border border-cyan-200/80 bg-gradient-to-br from-cyan-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-cyan-400 hover:shadow-soft transition-all"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-cyan-800">
+                      Disbursement
+                    </span>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl font-black text-slate-900">
-                  {analytics?.queues?.disbursement?.count || 0}
-                </div>
-                <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
-                  {formatCurrency(analytics?.queues?.disbursement?.volume || 0)} ready for payout
-                </span>
-              </Link>
+                  <div className="text-xl sm:text-2xl font-black text-slate-900">
+                    {analytics?.queues?.disbursement?.count || 0}
+                  </div>
+                  <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
+                    {formatCurrency(analytics?.queues?.disbursement?.volume || 0)} ready for payout
+                  </span>
+                </Link>
 
-              {/* Collection Queue */}
-              <Link
-                href="/dashboard/collection"
-                className="group rounded-2xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-emerald-400 hover:shadow-soft transition-all"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-emerald-800">
-                    Collections
-                  </span>
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                {/* Collection Queue */}
+                <Link
+                  href="/dashboard/collection"
+                  className="group rounded-2xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/50 via-white to-white p-3.5 sm:p-4 shadow-2xs hover:border-emerald-400 hover:shadow-soft transition-all"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+                      Collections
+                    </span>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl font-black text-slate-900">
-                  {analytics?.queues?.collection?.count || 0}
-                </div>
-                <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
-                  {formatCurrency(analytics?.queues?.collection?.volume || 0)} actively servicing
-                </span>
-              </Link>
-            </div>
+                  <div className="text-xl sm:text-2xl font-black text-slate-900">
+                    {analytics?.queues?.collection?.count || 0}
+                  </div>
+                  <span className="text-[11px] text-slate-500 mt-0.5 block truncate">
+                    {formatCurrency(analytics?.queues?.collection?.volume || 0)} actively servicing
+                  </span>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* SECTION 3: Conversion Ratios & Portfolio Status Distribution */}
-          <div className="grid gap-4 lg:grid-cols-12">
+          {initialLoading && !analytics ? (
+            <div className="grid gap-4 lg:grid-cols-12">
+              <div className="lg:col-span-5 rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-soft">
+                <Skeleton className="h-64 rounded-xl" />
+              </div>
+              <div className="lg:col-span-7 rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-soft">
+                <Skeleton className="h-64 rounded-xl" />
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-4 lg:grid-cols-12">
             {/* Left 5 Cols: Conversion & Underwriting Efficiency */}
             <div className="lg:col-span-5 rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-soft space-y-4">
               <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
@@ -821,6 +852,7 @@ function ExecutiveDashboard({ user }: { user: any }) {
               </div>
             </div>
           </div>
+        )}
 
           {/* SECTION 4: Enhanced Connected Live Operations Activity Stream */}
           <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-6 space-y-4">
@@ -944,7 +976,9 @@ function ExecutiveDashboard({ user }: { user: any }) {
             </div>
 
             {/* Modern Card Feed Container (No Vertical Wire) */}
-            {filteredActivity.length === 0 ? (
+            {initialLoading && !analytics ? (
+              <FeedSkeleton items={4} />
+            ) : filteredActivity.length === 0 ? (
               <div className="py-12 text-center text-xs text-slate-400">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                   <Activity className="h-6 w-6" />

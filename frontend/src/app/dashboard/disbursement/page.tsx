@@ -257,29 +257,37 @@ function DisbursementModule() {
       {message && <Notice type={message.type} message={message.text} title={message.title} />}
 
       {/* KPI Stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <MetricCard
-          label="Awaiting Disbursal"
-          value={loans.length}
-          subtitle="Sanctioned loans ready for release"
-          icon={Clock}
-          color="amber"
-        />
-        <MetricCard
-          label="Pending Release Volume"
-          value={formatCurrency(totalDisbursementValue)}
-          subtitle="Net transfer volume in queue"
-          icon={Banknote}
-          color="emerald"
-        />
-        <MetricCard
-          label="Total Capital Disbursed"
-          value={formatCurrency(totalHistoricalReleased)}
-          subtitle={`${historyLoans.length} executed loan payouts`}
-          icon={History}
-          color="sky"
-        />
-      </div>
+      {initialLoading && loans.length === 0 && historyLoans.length === 0 ? (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <MetricCard
+            label="Awaiting Disbursal"
+            value={loans.length}
+            subtitle="Sanctioned loans ready for release"
+            icon={Clock}
+            color="amber"
+          />
+          <MetricCard
+            label="Pending Release Volume"
+            value={formatCurrency(totalDisbursementValue)}
+            subtitle="Net transfer volume in queue"
+            icon={Banknote}
+            color="emerald"
+          />
+          <MetricCard
+            label="Total Capital Disbursed"
+            value={formatCurrency(totalHistoricalReleased)}
+            subtitle={`${historyLoans.length} executed loan payouts`}
+            icon={History}
+            color="sky"
+          />
+        </div>
+      )}
 
       {/* Tab Content 1: Active Queue */}
       {activeTab === "QUEUE" && (
@@ -293,7 +301,9 @@ function DisbursementModule() {
             </div>
           </div>
 
-          {loans.length === 0 ? (
+          {initialLoading && loans.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : loans.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <Landmark className="h-6 w-6" />
@@ -395,7 +405,9 @@ function DisbursementModule() {
             </div>
           </div>
 
-          {filteredHistory.length === 0 ? (
+          {initialLoading && historyLoans.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : filteredHistory.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <History className="h-6 w-6" />

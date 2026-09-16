@@ -274,36 +274,45 @@ function CollectionModule() {
       {message && <Notice type={message.type} message={message.text} title={message.title} />}
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <MetricCard
-          label="Active Disbursed"
-          value={loans.length}
-          subtitle="Awaiting settlement"
-          icon={Wallet}
-          color="emerald"
-        />
-        <MetricCard
-          label="Total Outstanding"
-          value={formatCurrency(totalOutstanding)}
-          subtitle="Remaining capital"
-          icon={Banknote}
-          color="brand"
-        />
-        <MetricCard
-          label="Total Recovered"
-          value={formatCurrency(totalCollected)}
-          subtitle="Active + settled"
-          icon={Coins}
-          color="sky"
-        />
-        <MetricCard
-          label="Fully Settled"
-          value={history.length}
-          subtitle="100% recovered"
-          icon={Award}
-          color="emerald"
-        />
-      </div>
+      {initialLoading && loans.length === 0 && history.length === 0 ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
+          <MetricSkeleton />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <MetricCard
+            label="Active Disbursed"
+            value={loans.length}
+            subtitle="Awaiting settlement"
+            icon={Wallet}
+            color="emerald"
+          />
+          <MetricCard
+            label="Total Outstanding"
+            value={formatCurrency(totalOutstanding)}
+            subtitle="Remaining capital"
+            icon={Banknote}
+            color="brand"
+          />
+          <MetricCard
+            label="Total Recovered"
+            value={formatCurrency(totalCollected)}
+            subtitle="Active + settled"
+            icon={Coins}
+            color="sky"
+          />
+          <MetricCard
+            label="Fully Settled"
+            value={history.length}
+            subtitle="100% recovered"
+            icon={Award}
+            color="emerald"
+          />
+        </div>
+      )}
 
       {/* TAB 1: ACTIVE DISBURSED LOANS */}
       {activeTab === "ACTIVE" && (
@@ -317,7 +326,9 @@ function CollectionModule() {
             </div>
           </div>
 
-          {loans.length === 0 ? (
+          {initialLoading && loans.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : loans.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <CheckCircle2 className="h-6 w-6 text-emerald-500" />
@@ -513,7 +524,9 @@ function CollectionModule() {
             </div>
           </div>
 
-          {filteredHistory.length === 0 ? (
+          {initialLoading && history.length === 0 ? (
+            <TableSkeleton rows={3} />
+          ) : filteredHistory.length === 0 ? (
             <div className="py-14 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
                 <Award className="h-6 w-6 text-slate-400" />
